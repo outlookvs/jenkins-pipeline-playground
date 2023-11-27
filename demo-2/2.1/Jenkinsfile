@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    environment {
+        RELEASE='20.04'
+    }
+
+    stages {
+        stage('') {
+            environment {
+                LOG_LEVEL='INFO'
+            }
+            steps {
+                echo "Building release $RELEASE with log level ${LOG_LEVEL}..."
+            }
+        }
+
+        stage('') {
+            steps {
+                echo "Testing. we can see $RELEASE but cannot see log level ${LOG_LEVEL}"
+            }
+        }
+    }
+}
