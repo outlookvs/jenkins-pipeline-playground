@@ -11,8 +11,8 @@ pipeline {
                 echo "this is build ${BUILD_NUMBER} of demo ${DEMO}"
                 sh '''
                     echo "this is a multi-line script"
-                    chmod +x ./test.sh
-                    ./test.sh
+                    chmod +x ./demo-1/test.sh
+                    ./demo-1/test.sh
                 '''
             }
         }
