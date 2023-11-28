@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        RELEASE='20.24'
+    }
+
+    stages {
+        stage('Build') {
+            environment {
+                LOG_LEVEL='INFO'
+            }
+            steps {
+                echo "Building release: $RELEASE with log level $LOG_LEVEL"
+                sh 'chmod +x ./demo-3/build.sh'
+                withCredentials([string(credentialsId: 'dummy-api-key', variable: 'API_KEY')]) {
+                    sh '''
+                        ./demo-3/build.sh
+                    '''
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Testing release $RELEASE"
+                script {
+                    if(Math.random() > 0.5) {
+                        throw new Exception()
+                    }
+                }
+                writeFile file: 'test-results.txt', text: 'passed'
+            }
+        }
+    }
+
+    post {
+        success {
+            archiveArtifacts 'test-results.txt'
+            echo "Build successful!!"
+        }
+        failure {
+            echo "Build failed with an error!!"
+        }
+    }
+}
